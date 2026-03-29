@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional portfolio website">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav aria-label="Main navigation">
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-layout">
+                <div class="hero-copy">
+                    <p class="hero-kicker">Visual Identity and Brand Design</p>
+                    <h1>Abdallh Mohamed</h1>
+                    <h2>Graphic Designer crafting polished visuals with clarity, strategy, and personality.</h2>
+                    <p class="hero-intro">
+                        I create modern brand materials, editorial layouts, and marketing pieces
+                        that feel premium, memorable, and easy to connect with. My focus is on
+                        turning ideas into visuals that look refined and work hard for the brand.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#projects">View My Work</a>
+                        <a class="secondary-action" href="#contact">Let&apos;s Work Together</a>
+                    </div>
+                    <ul class="hero-highlights" aria-label="Key strengths">
+                        <li>Brand identity systems</li>
+                        <li>Brochure and print design</li>
+                        <li>Modern marketing visuals</li>
+                    </ul>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-glow" aria-hidden="true"></div>
+                    <figure class="hero-portrait">
+                        <img src="assets/images/profile-photo.jpeg" alt="Portrait of Abdallh Mohamed">
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div>
+                <h2>About Me</h2>
+                <p>
+                    I design visuals that sell.
+
+                    As a graphic designer specializing in brand marketing,</br>
+                    I create clean, strategic designs that highlight value, build trust, and attract the right audience.
+
+                    My focus is simple: turn ideas into visuals that communicate clearly and leave a lasting impression.
+                </p>
+                <p>
+                    I enjoy turning ideas into designs that are simple, clear, and effective.
+                </p>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div>
+                <h2>Projects</h2>
+                <p>
+                    A selection of projects will be displayed here. Replace these placeholders
+                    with your featured work, screenshots, and short descriptions.
+                </p>
+                <div class="projects-grid">
+                    <a
+                        class="project-link"
+                        href="assets/pdfs/sahab-brochure.pdf"
+                        data-type="pdf"
+                        data-source="assets/pdfs/sahab-brochure.pdf"
+                        data-title="Property Marketing Brochure | Sahab Real Estate"
+                        data-description="A modern brochure design for Sahab Development, created to highlight property features and location advantages with a clean and premium visual style."
+                        >
+                        <article class="project-card">
+                            <figure>
+                                <img src="assets/images/project1_preview.png" alt="Project One">
+                                <figcaption>Property Marketing Brochure | Sahab Real Estate</figcaption>
+                            </figure>
+                            <p>A high-converting real estate brochure designed to attract and engage potential buyers.</p>
+                        </article>
+                    </a>
+
+                    <a
+                        class="project-link"
+                        href="assets/pdfs/skills-brochure.pdf"
+                        data-type="pdf"
+                        data-source="assets/pdfs/skills-brochure.pdf"
+                        data-title="Property Marketing Brochure | Skills Real Estate"
+                        data-description="A clean and modern real estate design focused on
+                                         presenting property features clearly and enhancing visual appeal."
+                        aria-label="Open preview for Project Two"
+                    >
+                        <article class="project-card">
+                            <figure>
+                                <img src="assets/images/project2_preview.png" alt="Placeholder preview for project two">
+                                <figcaption>Property Marketing Brochure | Skills Real Estate</figcaption>
+                            </figure>
+                            <p>A strategic real estate design crafted to
+                                 showcase property value and attract potential buyers.</p>
+                        </article>
+                    </a>
+
+                    <a
+                        class="project-link"
+                        href="files/project-three.pdf"
+                        data-type="pdf"
+                        data-source="files/project-three.pdf"
+                        data-title="Project Three PDF"
+                        data-description="Brief placeholder description for project three PDF document."
+                        aria-label="Open preview for Project Three PDF"
+                    >
+                        <article class="project-card">
+                            <figure>
+                                <img src="https://via.placeholder.com/400x250" alt="Placeholder preview for project three PDF">
+                                <figcaption>Project Three PDF</figcaption>
+                            </figure>
+                            <p>Brief placeholder description for project three PDF document.</p>
+                        </article>
+                    </a>
+
+                    <a
+                        class="project-link"
+                        href="files/project-four.pdf"
+                        data-type="pdf"
+                        data-source="files/project-four.pdf"
+                        data-title="Project Four PDF"
+                        data-description="Brief placeholder description for project four PDF document."
+                        aria-label="Open preview for Project Four PDF"
+                    >
+                        <article class="project-card">
+                            <figure>
+                                <img src="https://via.placeholder.com/400x250" alt="Placeholder preview for project four PDF">
+                                <figcaption>Project Four PDF</figcaption>
+                            </figure>
+                            <p>Brief placeholder description for project four PDF document.</p>
+                        </article>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div>
+                <h2>Contact</h2>
+                <p>
+                    This is placeholder text for your contact section. Invite visitors to
+                    reach out for collaborations, freelance work, or full-time opportunities.
+                </p>
+                <address>
+                    <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+                    <p>Location: Your City, Country</p>
+                </address>
+                <a
+                    class="whatsapp-button"
+                    href="https://wa.me/201063548727?text=Hello%2C%20I%20saw%20your%20portfolio"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Contact on WhatsApp"
+                >
+                    <span class="whatsapp-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                            <path d="M19.05 4.94A9.77 9.77 0 0 0 12.09 2C6.67 2 2.26 6.4 2.25 11.82a9.8 9.8 0 0 0 1.31 4.91L2 22l5.42-1.42a9.8 9.8 0 0 0 4.67 1.19h.01c5.42 0 9.83-4.4 9.84-9.82a9.74 9.74 0 0 0-2.89-7.01Zm-6.96 15.17h-.01a8.14 8.14 0 0 1-4.14-1.13l-.3-.18-3.21.84.86-3.13-.2-.32a8.17 8.17 0 0 1-1.25-4.36c0-4.51 3.67-8.18 8.19-8.18a8.1 8.1 0 0 1 5.78 2.4 8.13 8.13 0 0 1 2.39 5.79c0 4.51-3.67 8.18-8.11 8.27Zm4.49-6.14c-.25-.13-1.47-.72-1.69-.8-.23-.08-.39-.13-.56.12-.17.25-.64.8-.79.97-.14.17-.29.19-.54.06-.25-.13-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.37-1.7-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.77-1.84-.2-.48-.4-.41-.56-.42h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.41 1.01 2.58c.13.17 1.76 2.69 4.27 3.77.6.26 1.07.42 1.43.54.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29Z"/>
+                        </svg>
+                    </span>
+                    <span>Chat on WhatsApp</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Abdallh Mohamed. All rights reserved.</p>
+    </footer>
+
+    <a
+        class="whatsapp-float"
+        href="https://wa.me/201063548727?text=Hello%2C%20I%20saw%20your%20portfolio"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open WhatsApp chat"
+    >
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path d="M19.05 4.94A9.77 9.77 0 0 0 12.09 2C6.67 2 2.26 6.4 2.25 11.82a9.8 9.8 0 0 0 1.31 4.91L2 22l5.42-1.42a9.8 9.8 0 0 0 4.67 1.19h.01c5.42 0 9.83-4.4 9.84-9.82a9.74 9.74 0 0 0-2.89-7.01Zm-6.96 15.17h-.01a8.14 8.14 0 0 1-4.14-1.13l-.3-.18-3.21.84.86-3.13-.2-.32a8.17 8.17 0 0 1-1.25-4.36c0-4.51 3.67-8.18 8.19-8.18a8.1 8.1 0 0 1 5.78 2.4 8.13 8.13 0 0 1 2.39 5.79c0 4.51-3.67 8.18-8.11 8.27Zm4.49-6.14c-.25-.13-1.47-.72-1.69-.8-.23-.08-.39-.13-.56.12-.17.25-.64.8-.79.97-.14.17-.29.19-.54.06-.25-.13-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.37-1.7-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.77-1.84-.2-.48-.4-.41-.56-.42h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.41 1.01 2.58c.13.17 1.76 2.69 4.27 3.77.6.26 1.07.42 1.43.54.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29Z"/>
+        </svg>
+    </a>
+
+    <div class="modal" id="project-modal" aria-hidden="true">
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="modal-close" type="button" aria-label="Close project preview" data-close-modal>
+                <span aria-hidden="true">X</span>
+            </button>
+            <div class="modal-header">
+                <h3 id="modal-title">Project Preview</h3>
+                <p id="modal-description"></p>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        const modal = document.getElementById("project-modal");
+        const modalBody = document.getElementById("modal-body");
+        const modalTitle = document.getElementById("modal-title");
+        const modalDescription = document.getElementById("modal-description");
+        const projectLinks = document.querySelectorAll(".project-link");
+        const closeControls = document.querySelectorAll("[data-close-modal]");
+        const pdfState = {
+            document: null,
+            page: 1,
+            totalPages: 0,
+            renderTask: null,
+            controlsTimer: null,
+            baseViewport: null,
+            scale: 1,
+            touchStartX: 0
+        };
+
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        }
+
+        function detectFileType(source) {
+            const cleanSource = (source || "").split("#")[0].split("?")[0].toLowerCase();
+
+            if (cleanSource.endsWith(".pdf")) {
+                return "pdf";
+            }
+
+            if (/\.(png|jpe?g|gif|webp|avif|svg)$/i.test(cleanSource)) {
+                return "image";
+            }
+
+            return "image";
+        }
+
+        function resetPdfState() {
+            if (pdfState.renderTask) {
+                try {
+                    pdfState.renderTask.cancel();
+                } catch (error) {
+                    console.warn("Unable to cancel PDF render task.", error);
+                }
+            }
+
+            pdfState.document = null;
+            pdfState.page = 1;
+            pdfState.totalPages = 0;
+            pdfState.renderTask = null;
+            pdfState.controlsTimer = null;
+            pdfState.baseViewport = null;
+            pdfState.scale = 1;
+            pdfState.touchStartX = 0;
+        }
+
+        function isMobilePdfViewer() {
+            return window.innerWidth <= 768;
+        }
+
+        function calculatePdfScale(viewer) {
+            if (!pdfState.baseViewport) {
+                return 1;
+            }
+
+            const canvasShell = viewer.querySelector(".pdf-canvas-shell");
+            const shellStyles = window.getComputedStyle(canvasShell);
+            const paddingX = parseFloat(shellStyles.paddingLeft) + parseFloat(shellStyles.paddingRight);
+            const paddingY = parseFloat(shellStyles.paddingTop) + parseFloat(shellStyles.paddingBottom);
+            const shellWidth = Math.max(canvasShell.clientWidth - paddingX, 0);
+            const shellHeight = Math.max(canvasShell.clientHeight - paddingY, 0);
+            const scale = Math.min(
+                shellWidth / pdfState.baseViewport.width,
+                shellHeight / pdfState.baseViewport.height
+            );
+
+            pdfState.scale = scale;
+            return scale;
+        }
+
+        function setPdfLoadingState(viewer, isLoading, label = "Loading document preview...") {
+            if (!viewer) {
+                return;
+            }
+
+            const loadingLabel = viewer.querySelector(".modal-loading p");
+            if (loadingLabel) {
+                loadingLabel.textContent = label;
+            }
+
+            viewer.classList.toggle("is-loading", isLoading);
+        }
+
+        async function renderPdfPage(viewer) {
+            if (!pdfState.document) {
+                return;
+            }
+
+            const canvas = viewer.querySelector(".pdf-canvas");
+            const pageIndicator = viewer.querySelector("[data-page-indicator]");
+            const previousButton = viewer.querySelector("[data-action='prev']");
+            const nextButton = viewer.querySelector("[data-action='next']");
+            const canvasContext = canvas.getContext("2d");
+            const page = await pdfState.document.getPage(pdfState.page);
+            const outputScale = window.devicePixelRatio || 1;
+            const viewport = page.getViewport({ scale: pdfState.scale });
+
+            canvas.width = Math.floor(viewport.width * outputScale);
+            canvas.height = Math.floor(viewport.height * outputScale);
+            canvas.style.width = `${viewport.width}px`;
+            canvas.style.height = `${viewport.height}px`;
+
+            canvasContext.setTransform(outputScale, 0, 0, outputScale, 0, 0);
+
+            viewer.classList.add("is-rendering");
+            setPdfLoadingState(viewer, true, "Rendering page...");
+
+            if (pdfState.renderTask) {
+                try {
+                    pdfState.renderTask.cancel();
+                } catch (error) {
+                    console.warn("Unable to cancel previous PDF render task.", error);
+                }
+            }
+
+            pdfState.renderTask = page.render({
+                canvasContext,
+                viewport
+            });
+
+            try {
+                await pdfState.renderTask.promise;
+            } catch (error) {
+                if (error?.name !== "RenderingCancelledException") {
+                    throw error;
+                }
+                return;
+            } finally {
+                pdfState.renderTask = null;
+            }
+
+            pageIndicator.textContent = `Page ${pdfState.page} / ${pdfState.totalPages}`;
+            previousButton.disabled = pdfState.page <= 1;
+            nextButton.disabled = pdfState.page >= pdfState.totalPages;
+
+            requestAnimationFrame(() => {
+                viewer.classList.remove("is-rendering");
+                setPdfLoadingState(viewer, false);
+            });
+        }
+
+        function clearPdfControlsTimer() {
+            if (pdfState.controlsTimer) {
+                clearTimeout(pdfState.controlsTimer);
+                pdfState.controlsTimer = null;
+            }
+        }
+
+        function showPdfControls(viewer) {
+            if (!viewer || isMobilePdfViewer()) {
+                return;
+            }
+
+            viewer.classList.add("controls-visible");
+            clearPdfControlsTimer();
+            pdfState.controlsTimer = setTimeout(() => {
+                viewer.classList.remove("controls-visible");
+            }, 2500);
+        }
+
+        function buildPdfViewer() {
+            const viewer = document.createElement("div");
+            viewer.className = "modal-pdf-viewer is-loading controls-visible";
+            viewer.innerHTML = `
+                <div class="pdf-stage">
+                    <div class="modal-loading">
+                        <span></span>
+                        <p>Loading document preview...</p>
+                    </div>
+                    <div class="pdf-canvas-shell">
+                        <canvas class="pdf-canvas"></canvas>
+                    </div>
+                    <div class="pdf-overlay-controls">
+                        <button type="button" class="pdf-toolbar-button" data-action="prev">Prev</button>
+                        <span class="pdf-toolbar-status" data-page-indicator>Page 1 / 1</span>
+                        <button type="button" class="pdf-toolbar-button" data-action="next">Next</button>
+                    </div>
+                </div>
+            `;
+
+            ["mousemove", "pointermove"].forEach((eventName) => {
+                viewer.addEventListener(eventName, () => showPdfControls(viewer));
+            });
+
+            viewer.addEventListener("touchstart", (event) => {
+                if (!isMobilePdfViewer()) {
+                    showPdfControls(viewer);
+                    return;
+                }
+
+                pdfState.touchStartX = event.changedTouches[0].clientX;
+            }, { passive: true });
+
+            viewer.addEventListener("touchend", async (event) => {
+                if (!isMobilePdfViewer() || !pdfState.document) {
+                    return;
+                }
+
+                const touchEndX = event.changedTouches[0].clientX;
+                const deltaX = touchEndX - pdfState.touchStartX;
+                const swipeThreshold = 45;
+
+                if (deltaX <= -swipeThreshold && pdfState.page < pdfState.totalPages) {
+                    pdfState.page += 1;
+                    await renderPdfPage(viewer);
+                }
+
+                if (deltaX >= swipeThreshold && pdfState.page > 1) {
+                    pdfState.page -= 1;
+                    await renderPdfPage(viewer);
+                }
+            }, { passive: true });
+
+            viewer.addEventListener("click", async (event) => {
+                const button = event.target.closest("[data-action]");
+                if (!button || button.disabled || !pdfState.document) {
+                    return;
+                }
+
+                const action = button.dataset.action;
+
+                if (action === "prev" && pdfState.page > 1) {
+                    pdfState.page -= 1;
+                    await renderPdfPage(viewer);
+                }
+
+                if (action === "next" && pdfState.page < pdfState.totalPages) {
+                    pdfState.page += 1;
+                    await renderPdfPage(viewer);
+                }
+            });
+
+            if (!isMobilePdfViewer()) {
+                showPdfControls(viewer);
+            }
+
+            return viewer;
+        }
+
+        async function openPdfModal(source) {
+            modalBody.classList.add("modal-body-pdf");
+
+            const viewer = buildPdfViewer();
+            modalBody.appendChild(viewer);
+
+            try {
+                if (!window.pdfjsLib) {
+                    throw new Error("PDF.js failed to load.");
+                }
+
+                setPdfLoadingState(viewer, true, "Loading document preview...");
+                pdfState.document = await pdfjsLib.getDocument(source).promise;
+                pdfState.totalPages = pdfState.document.numPages;
+                pdfState.page = 1;
+                const firstPage = await pdfState.document.getPage(1);
+                pdfState.baseViewport = firstPage.getViewport({ scale: 1 });
+                calculatePdfScale(viewer);
+                await renderPdfPage(viewer);
+            } catch (error) {
+                console.error("Unable to load PDF preview.", error);
+                viewer.innerHTML = `
+                    <div class="pdf-error-state">
+                        <p>Unable to load this PDF preview.</p>
+                        <a href="${source}" target="_blank" rel="noopener noreferrer">Open the PDF in a new tab</a>
+                    </div>
+                `;
+            }
+        }
+
+        function openModal(link) {
+            const source = link.dataset.source || link.getAttribute("href") || "";
+            const type = detectFileType(source);
+            const title = link.dataset.title || "Project Preview";
+            const description = link.dataset.description || "";
+
+            resetPdfState();
+            modalTitle.textContent = title;
+            modalDescription.textContent = description;
+            modalBody.innerHTML = "";
+            modalBody.className = "modal-body";
+
+            if (type === "pdf") {
+                openPdfModal(source);
+            } else if (type === "image") {
+                const image = document.createElement("img");
+                image.src = source;
+                image.alt = title;
+                image.className = "modal-image";
+                modalBody.appendChild(image);
+            }
+
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-open");
+        }
+
+        function closeModal() {
+            clearPdfControlsTimer();
+            resetPdfState();
+            modalBody.innerHTML = "";
+            modalBody.className = "modal-body";
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("modal-open");
+        }
+
+        projectLinks.forEach((link) => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                openModal(link);
+            });
+        });
+
+        closeControls.forEach((control) => {
+            control.addEventListener("click", closeModal);
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && modal.classList.contains("is-open")) {
+                closeModal();
+            }
+        });
+
+        window.addEventListener("resize", async () => {
+            const viewer = modalBody.querySelector(".modal-pdf-viewer");
+            if (viewer && modal.classList.contains("is-open") && pdfState.document) {
+                calculatePdfScale(viewer);
+                await renderPdfPage(viewer);
+            }
+        });
+    </script>
+</body>
+</html>
