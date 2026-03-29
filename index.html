@@ -304,6 +304,15 @@
             viewer.classList.toggle("is-loading", isLoading);
         }
 
+        function setAmbientBackground(target, source) {
+            if (!target) {
+                return;
+            }
+
+            target.style.setProperty("--ambient-image", source ? `url("${source}")` : "none");
+            target.classList.toggle("has-ambient", Boolean(source));
+        }
+
         async function renderPdfPage(viewer) {
             if (!pdfState.document) {
                 return;
@@ -359,6 +368,7 @@
             requestAnimationFrame(() => {
                 viewer.classList.remove("is-rendering");
                 setPdfLoadingState(viewer, false);
+                setAmbientBackground(viewer, canvas.toDataURL("image/jpeg", 0.72));
             });
         }
 
@@ -386,6 +396,8 @@
             viewer.className = "modal-pdf-viewer is-loading controls-visible";
             viewer.innerHTML = `
                 <div class="pdf-stage">
+                    <div class="viewer-ambient" aria-hidden="true"></div>
+                    <div class="viewer-ambient-overlay" aria-hidden="true"></div>
                     <div class="modal-loading">
                         <span></span>
                         <p>Loading document preview...</p>
@@ -505,11 +517,27 @@
             if (type === "pdf") {
                 openPdfModal(source);
             } else if (type === "image") {
+                const imageViewer = document.createElement("div");
+                imageViewer.className = "image-viewer has-ambient";
+                imageViewer.style.setProperty("--ambient-image", `url("${source}")`);
+
+                const ambient = document.createElement("div");
+                ambient.className = "viewer-ambient";
+                ambient.setAttribute("aria-hidden", "true");
+
+                const ambientOverlay = document.createElement("div");
+                ambientOverlay.className = "viewer-ambient-overlay";
+                ambientOverlay.setAttribute("aria-hidden", "true");
+
                 const image = document.createElement("img");
                 image.src = source;
                 image.alt = title;
                 image.className = "modal-image";
-                modalBody.appendChild(image);
+
+                imageViewer.appendChild(ambient);
+                imageViewer.appendChild(ambientOverlay);
+                imageViewer.appendChild(image);
+                modalBody.appendChild(imageViewer);
             }
 
             modal.classList.add("is-open");
