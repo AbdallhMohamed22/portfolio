@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Professional portfolio website">
     <title>Portfolio</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -78,9 +79,9 @@
                 <div class="projects-grid">
                     <a
                         class="project-link"
-                        href="assets/pdfs/sahab-brochure.pdf"
-                        data-type="pdf"
-                        data-source="assets/pdfs/sahab-brochure.pdf"
+                        href="assets/images/projects/sahab/sahab-brochure_page-0001.jpg"
+                        data-type="gallery"
+                        data-gallery="sahab"
                         data-title="Property Marketing Brochure | Sahab Real Estate"
                         data-description="A modern brochure design for Sahab Development, created to highlight property features and location advantages with a clean and premium visual style."
                         >
@@ -95,9 +96,9 @@
 
                     <a
                         class="project-link"
-                        href="assets/pdfs/skills-brochure.pdf"
-                        data-type="pdf"
-                        data-source="assets/pdfs/skills-brochure.pdf"
+                        href="assets/images/projects/skills/skills-brochure_page-0001.jpg"
+                        data-type="gallery"
+                        data-gallery="skills"
                         data-title="Property Marketing Brochure | Skills Real Estate"
                         data-description="A clean and modern real estate design focused on
                                          presenting property features clearly and enhancing visual appeal."
@@ -116,8 +117,8 @@
                     <a
                         class="project-link"
                         href="assets/images/street-sign-design.jpeg"
-                        data-type="img"
-                        data-source="assets/images/street-sign-design.jpeg"
+                        data-type="gallery"
+                        data-gallery="tower-one"
                         data-title="Real Estate Billboard Design | Tower Development"
                         data-description="A high-impact billboard design crafted to attract attention and highlight real estate value instantly, 
                                           using clear messaging and a visually striking layout optimized for outdoor visibility."
@@ -136,8 +137,8 @@
                     <a
                         class="project-link"
                         href="assets/images/street-sign-design2.jpeg"
-                        data-type="img"
-                        data-source="assets/images/street-sign-design2.jpeg"
+                        data-type="gallery"
+                        data-gallery="tower-two"
                         data-title="Real Estate Billboard Design | Tower Development"
                         data-description="A high-impact billboard design crafted to attract attention and highlight real estate value instantly, 
                                           using clear messaging and a visually striking layout optimized for outdoor visibility."
@@ -215,7 +216,7 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const modal = document.getElementById("project-modal");
         const modalBody = document.getElementById("modal-body");
@@ -223,91 +224,51 @@
         const modalDescription = document.getElementById("modal-description");
         const projectLinks = document.querySelectorAll(".project-link");
         const closeControls = document.querySelectorAll("[data-close-modal]");
-        const pdfState = {
-            document: null,
-            page: 1,
-            totalPages: 0,
-            renderTask: null,
-            controlsTimer: null,
-            baseViewport: null,
-            scale: 1,
-            touchStartX: 0,
-            cache: new Map()
+        let projectSwiper = null;
+        const PROJECT_GALLERIES = {
+            sahab: [
+                "assets/images/projects/sahab/sahab-brochure_page-0001.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0002.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0003.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0004.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0005.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0006.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0007.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0008.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0009.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0010.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0011.jpg",
+                "assets/images/projects/sahab/sahab-brochure_page-0012.jpg"
+            ],
+            skills: [
+                "assets/images/projects/skills/skills-brochure_page-0001.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0002.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0003.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0004.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0005.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0006.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0007.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0008.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0009.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0010.jpg",
+                "assets/images/projects/skills/skills-brochure_page-0011.jpg"
+            ],
+            "tower-one": [
+                "assets/images/street-sign-design.jpeg"
+            ],
+            "tower-two": [
+                "assets/images/street-sign-design2.jpeg"
+            ]
         };
-
-        if (window.pdfjsLib) {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-        }
 
         function detectFileType(source) {
             const cleanSource = (source || "").split("#")[0].split("?")[0].toLowerCase();
-
-            if (cleanSource.endsWith(".pdf")) {
-                return "pdf";
-            }
 
             if (/\.(png|jpe?g|gif|webp|avif|svg)$/i.test(cleanSource)) {
                 return "image";
             }
 
             return "image";
-        }
-
-        function resetPdfState() {
-            if (pdfState.renderTask) {
-                try {
-                    pdfState.renderTask.cancel();
-                } catch (error) {
-                    console.warn("Unable to cancel PDF render task.", error);
-                }
-            }
-
-            pdfState.document = null;
-            pdfState.page = 1;
-            pdfState.totalPages = 0;
-            pdfState.renderTask = null;
-            pdfState.controlsTimer = null;
-            pdfState.baseViewport = null;
-            pdfState.scale = 1;
-            pdfState.touchStartX = 0;
-            pdfState.cache = new Map();
-        }
-
-        function isMobilePdfViewer() {
-            return window.innerWidth <= 768;
-        }
-
-        function calculatePdfScale(viewer) {
-            if (!pdfState.baseViewport) {
-                return 1;
-            }
-
-            const canvasShell = viewer.querySelector(".pdf-canvas-shell");
-            const shellStyles = window.getComputedStyle(canvasShell);
-            const paddingX = parseFloat(shellStyles.paddingLeft) + parseFloat(shellStyles.paddingRight);
-            const paddingY = parseFloat(shellStyles.paddingTop) + parseFloat(shellStyles.paddingBottom);
-            const shellWidth = Math.max(canvasShell.clientWidth - paddingX, 0);
-            const shellHeight = Math.max(canvasShell.clientHeight - paddingY, 0);
-            const scale = Math.min(
-                shellWidth / pdfState.baseViewport.width,
-                shellHeight / pdfState.baseViewport.height
-            );
-
-            pdfState.scale = scale;
-            return scale;
-        }
-
-        function setPdfLoadingState(viewer, isLoading, label = "Loading document preview...") {
-            if (!viewer) {
-                return;
-            }
-
-            const loadingLabel = viewer.querySelector(".modal-loading p");
-            if (loadingLabel) {
-                loadingLabel.textContent = label;
-            }
-
-            viewer.classList.toggle("is-loading", isLoading);
         }
 
         function setAmbientBackground(target, source) {
@@ -319,279 +280,189 @@
             target.classList.toggle("has-ambient", Boolean(source));
         }
 
-        function getPdfRenderProfile() {
-            const baseScale = isMobilePdfViewer() ? 1.05 : 1.16;
-            const outputScale = isMobilePdfViewer()
-                ? Math.min(window.devicePixelRatio || 1, 1.35)
-                : Math.min(window.devicePixelRatio || 1, 1.85);
-
-            return { baseScale, outputScale };
+        function destroyGallerySlider() {
+            if (projectSwiper) {
+                projectSwiper.destroy(true, true);
+                projectSwiper = null;
+            }
         }
 
-        function getPdfCacheKey(pageNumber, scale, outputScale) {
-            return `${pageNumber}-${Math.round(scale * 1000)}-${Math.round(outputScale * 100)}`;
+        function buildSlideMarkup(images) {
+            return images.map((image, index) => `
+                <div class="swiper-slide">
+                    <img
+                        class="gallery-slide-image"
+                        src="${image}"
+                        alt="Project slide ${index + 1}"
+                        ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}
+                    >
+                </div>
+            `).join("");
         }
 
-        function displayPdfSlide(viewer, cachedPage) {
-            const slide = viewer.querySelector(".pdf-slide");
-            if (!slide) {
+        function updateSliderAmbient() {
+            if (!projectSwiper) {
                 return;
             }
 
-            slide.src = cachedPage.src;
-            slide.onload = () => {
-                setAmbientBackground(viewer, cachedPage.ambient);
-                viewer.classList.add("page-ready");
-                viewer.classList.remove("is-rendering");
-                setPdfLoadingState(viewer, false);
-            };
-        }
-
-        async function renderPdfPageToImage(pageNumber) {
-            if (!pdfState.document || pageNumber < 1 || pageNumber > pdfState.totalPages) {
-                return null;
+            const activeSlideImage = projectSwiper.slides[projectSwiper.activeIndex]?.querySelector(".gallery-slide-image");
+            if (activeSlideImage?.currentSrc || activeSlideImage?.src) {
+                setAmbientBackground(projectSwiper.el.closest(".modal-gallery"), activeSlideImage.currentSrc || activeSlideImage.src);
             }
-
-            const { baseScale, outputScale } = getPdfRenderProfile();
-            const effectiveScale = pdfState.scale * baseScale;
-            const cacheKey = getPdfCacheKey(pageNumber, effectiveScale, outputScale);
-
-            if (pdfState.cache.has(cacheKey)) {
-                return pdfState.cache.get(cacheKey);
-            }
-
-            const page = await pdfState.document.getPage(pageNumber);
-            const viewport = page.getViewport({ scale: effectiveScale });
-            const offscreenCanvas = document.createElement("canvas");
-            const offscreenContext = offscreenCanvas.getContext("2d");
-
-            offscreenCanvas.width = Math.floor(viewport.width * outputScale);
-            offscreenCanvas.height = Math.floor(viewport.height * outputScale);
-            offscreenContext.setTransform(outputScale, 0, 0, outputScale, 0, 0);
-
-            await page.render({
-                canvasContext: offscreenContext,
-                viewport
-            }).promise;
-
-            const pageImage = offscreenCanvas.toDataURL("image/jpeg", 0.78);
-            const cachedPage = {
-                src: pageImage,
-                ambient: pageImage,
-                width: offscreenCanvas.width,
-                height: offscreenCanvas.height
-            };
-
-            pdfState.cache.set(cacheKey, cachedPage);
-            return cachedPage;
         }
 
-        async function prefetchPdfPage(pageNumber) {
-            await renderPdfPageToImage(pageNumber);
-        }
-
-        async function renderPdfPage(viewer) {
-            if (!pdfState.document) {
+        function initializeGallerySlider(galleryId) {
+            const swiperElement = modalBody.querySelector(".project-swiper");
+            if (!swiperElement) {
+                console.warn("Swiper container not found for gallery:", galleryId);
                 return;
             }
 
-            const pageIndicator = viewer.querySelector("[data-page-indicator]");
-            const previousButton = viewer.querySelector("[data-action='prev']");
-            const nextButton = viewer.querySelector("[data-action='next']");
-            const { baseScale, outputScale } = getPdfRenderProfile();
-            const effectiveScale = pdfState.scale * baseScale;
-            const cacheKey = getPdfCacheKey(pdfState.page, effectiveScale, outputScale);
+            console.log("Initializing Swiper for gallery:", galleryId);
+            const slideCount = swiperElement.querySelectorAll(".swiper-slide").length;
+            const paginationElement = swiperElement.querySelector(".swiper-pagination");
+            const nextButton = swiperElement.querySelector(".swiper-button-next");
+            const prevButton = swiperElement.querySelector(".swiper-button-prev");
 
-            viewer.classList.add("is-rendering");
-            viewer.classList.remove("page-ready");
-            setPdfLoadingState(viewer, true, "Rendering page...");
+            console.log("Slides found:", slideCount);
 
-            if (pdfState.cache.has(cacheKey)) {
-                pageIndicator.textContent = `Page ${pdfState.page} / ${pdfState.totalPages}`;
-                previousButton.disabled = pdfState.page <= 1;
-                nextButton.disabled = pdfState.page >= pdfState.totalPages;
-                displayPdfSlide(viewer, pdfState.cache.get(cacheKey));
-                void prefetchPdfPage(pdfState.page + 1);
-                void prefetchPdfPage(pdfState.page - 1);
-                return;
-            }
+            if (slideCount <= 1) {
+                if (paginationElement) {
+                    paginationElement.style.display = "none";
+                }
 
-            if (pdfState.renderTask) {
-                try {
-                    pdfState.renderTask.cancel();
-                } catch (error) {
-                    console.warn("Unable to cancel previous PDF render task.", error);
+                if (nextButton) {
+                    nextButton.style.display = "none";
+                }
+
+                if (prevButton) {
+                    prevButton.style.display = "none";
+                }
+            } else {
+                if (paginationElement) {
+                    paginationElement.style.display = "";
+                }
+
+                if (nextButton) {
+                    nextButton.style.display = "";
+                }
+
+                if (prevButton) {
+                    prevButton.style.display = "";
                 }
             }
 
-            try {
-                const cachedPage = await renderPdfPageToImage(pdfState.page);
-                if (!cachedPage) {
+            const galleryImages = PROJECT_GALLERIES[galleryId] || [];
+            destroyGallerySlider();
+            projectSwiper = new Swiper(swiperElement, {
+                speed: 560,
+                spaceBetween: 18,
+                preloadImages: false,
+                updateOnWindowResize: true,
+                pagination: {
+                    el: paginationElement,
+                    clickable: true
+                },
+                navigation: {
+                    nextEl: nextButton,
+                    prevEl: prevButton
+                },
+                keyboard: {
+                    enabled: true
+                },
+                on: {
+                    init() {
+                        console.log("Swiper initialized successfully for:", galleryId);
+                        updateSliderAmbient();
+                    },
+                    slideChangeTransitionStart() {
+                        this.el.closest(".modal-gallery")?.classList.add("is-transitioning");
+                    },
+                    slideChangeTransitionEnd() {
+                        this.el.closest(".modal-gallery")?.classList.remove("is-transitioning");
+                        updateSliderAmbient();
+                    }
+                }
+            });
+
+            requestAnimationFrame(() => {
+                projectSwiper?.update();
+                console.log("Swiper updated after modal open:", galleryId);
+            });
+        }
+
+        function scheduleGalleryInitialization(galleryId) {
+            const modalDialog = modal.querySelector(".modal-dialog");
+            if (!modalDialog) {
+                return;
+            }
+
+            void modalDialog.offsetHeight;
+            console.log("Modal reflow forced before Swiper init:", galleryId, modalDialog.offsetHeight);
+
+            window.setTimeout(() => {
+                if (!modal.classList.contains("is-open")) {
                     return;
                 }
 
-                pageIndicator.textContent = `Page ${pdfState.page} / ${pdfState.totalPages}`;
-                previousButton.disabled = pdfState.page <= 1;
-                nextButton.disabled = pdfState.page >= pdfState.totalPages;
-                displayPdfSlide(viewer, cachedPage);
-            } catch (error) {
-                if (error?.name !== "RenderingCancelledException") {
-                    throw error;
-                }
-                return;
-            } finally {
-                pdfState.renderTask = null;
-            }
-
-            void prefetchPdfPage(pdfState.page + 1);
-            void prefetchPdfPage(pdfState.page - 1);
+                initializeGallerySlider(galleryId);
+                projectSwiper?.update();
+                console.log("Swiper initialization delayed until modal visible:", galleryId);
+            }, 60);
         }
 
-        function clearPdfControlsTimer() {
-            if (pdfState.controlsTimer) {
-                clearTimeout(pdfState.controlsTimer);
-                pdfState.controlsTimer = null;
-            }
-        }
-
-        function showPdfControls(viewer) {
-            if (!viewer || isMobilePdfViewer()) {
+        function openGalleryModal(galleryId) {
+            const galleryImages = PROJECT_GALLERIES[galleryId] || [];
+            if (!galleryImages.length) {
+                console.warn("No gallery images found for:", galleryId);
                 return;
             }
 
-            viewer.classList.add("controls-visible");
-            clearPdfControlsTimer();
-            pdfState.controlsTimer = setTimeout(() => {
-                viewer.classList.remove("controls-visible");
-            }, 2500);
-        }
+            console.log("Opening gallery:", galleryId, galleryImages);
 
-        function buildPdfViewer() {
-            const viewer = document.createElement("div");
-            viewer.className = "modal-pdf-viewer is-loading controls-visible";
-            viewer.innerHTML = `
-                <div class="pdf-stage">
+            modalBody.classList.add("modal-body-gallery");
+            modalBody.innerHTML = `
+                <div class="modal-gallery has-ambient">
                     <div class="viewer-ambient" aria-hidden="true"></div>
                     <div class="viewer-ambient-overlay" aria-hidden="true"></div>
-                    <div class="modal-loading">
-                        <span></span>
-                        <div class="pdf-loading-skeleton" aria-hidden="true"></div>
-                        <p>Loading document preview...</p>
-                    </div>
-                    <div class="pdf-canvas-shell">
-                        <img class="pdf-slide" alt="PDF page preview">
-                    </div>
-                    <div class="pdf-overlay-controls">
-                        <button type="button" class="pdf-toolbar-button" data-action="prev">Prev</button>
-                        <span class="pdf-toolbar-status" data-page-indicator>Page 1 / 1</span>
-                        <button type="button" class="pdf-toolbar-button" data-action="next">Next</button>
+                    <div class="swiper project-swiper">
+                        <div class="swiper-wrapper">
+                            ${buildSlideMarkup(galleryImages)}
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <button class="swiper-button-prev gallery-nav" type="button" aria-label="Previous slide"></button>
+                        <button class="swiper-button-next gallery-nav" type="button" aria-label="Next slide"></button>
                     </div>
                 </div>
             `;
 
-            ["mousemove", "pointermove"].forEach((eventName) => {
-                viewer.addEventListener(eventName, () => showPdfControls(viewer));
+            modal.querySelectorAll(".gallery-slide-image").forEach((image, index) => {
+                if (image.complete) {
+                    image.classList.add("is-loaded");
+                }
+
+                image.addEventListener("load", () => {
+                    image.classList.add("is-loaded");
+                    console.log(`Gallery image loaded: ${galleryId} slide ${index + 1}`);
+                }, { once: true });
             });
-
-            viewer.addEventListener("touchstart", (event) => {
-                if (!isMobilePdfViewer()) {
-                    showPdfControls(viewer);
-                    return;
-                }
-
-                pdfState.touchStartX = event.changedTouches[0].clientX;
-            }, { passive: true });
-
-            viewer.addEventListener("touchend", async (event) => {
-                if (!isMobilePdfViewer() || !pdfState.document) {
-                    return;
-                }
-
-                const touchEndX = event.changedTouches[0].clientX;
-                const deltaX = touchEndX - pdfState.touchStartX;
-                const swipeThreshold = 45;
-
-                if (deltaX <= -swipeThreshold && pdfState.page < pdfState.totalPages) {
-                    pdfState.page += 1;
-                    await renderPdfPage(viewer);
-                }
-
-                if (deltaX >= swipeThreshold && pdfState.page > 1) {
-                    pdfState.page -= 1;
-                    await renderPdfPage(viewer);
-                }
-            }, { passive: true });
-
-            viewer.addEventListener("click", async (event) => {
-                const button = event.target.closest("[data-action]");
-                if (!button || button.disabled || !pdfState.document) {
-                    return;
-                }
-
-                const action = button.dataset.action;
-
-                if (action === "prev" && pdfState.page > 1) {
-                    pdfState.page -= 1;
-                    await renderPdfPage(viewer);
-                }
-
-                if (action === "next" && pdfState.page < pdfState.totalPages) {
-                    pdfState.page += 1;
-                    await renderPdfPage(viewer);
-                }
-            });
-
-            if (!isMobilePdfViewer()) {
-                showPdfControls(viewer);
-            }
-
-            return viewer;
-        }
-
-        async function openPdfModal(source) {
-            modalBody.classList.add("modal-body-pdf");
-
-            const viewer = buildPdfViewer();
-            modalBody.appendChild(viewer);
-
-            try {
-                if (!window.pdfjsLib) {
-                    throw new Error("PDF.js failed to load.");
-                }
-
-                setPdfLoadingState(viewer, true, "Loading document preview...");
-                pdfState.document = await pdfjsLib.getDocument(source).promise;
-                pdfState.totalPages = pdfState.document.numPages;
-                pdfState.page = 1;
-                const firstPage = await pdfState.document.getPage(1);
-                pdfState.baseViewport = firstPage.getViewport({ scale: 1 });
-                calculatePdfScale(viewer);
-                await renderPdfPage(viewer);
-            } catch (error) {
-                console.error("Unable to load PDF preview.", error);
-                viewer.innerHTML = `
-                    <div class="pdf-error-state">
-                        <p>Unable to load this PDF preview.</p>
-                        <a href="${source}" target="_blank" rel="noopener noreferrer">Open the PDF in a new tab</a>
-                    </div>
-                `;
-            }
         }
 
         function openModal(link) {
             const source = link.dataset.source || link.getAttribute("href") || "";
-            const type = detectFileType(source);
+            const type = link.dataset.type || detectFileType(source);
+            const galleryId = link.dataset.gallery || "";
             const title = link.dataset.title || "Project Preview";
             const description = link.dataset.description || "";
 
-            resetPdfState();
+            destroyGallerySlider();
             modalTitle.textContent = title;
             modalDescription.textContent = description;
             modalBody.innerHTML = "";
             modalBody.className = "modal-body";
 
-            if (type === "pdf") {
-                openPdfModal(source);
+            if (type === "gallery") {
+                openGalleryModal(galleryId);
             } else if (type === "image") {
                 const imageViewer = document.createElement("div");
                 imageViewer.className = "image-viewer has-ambient";
@@ -619,11 +490,16 @@
             modal.classList.add("is-open");
             modal.setAttribute("aria-hidden", "false");
             document.body.classList.add("modal-open");
+
+            if (type === "gallery") {
+                requestAnimationFrame(() => {
+                scheduleGalleryInitialization(galleryId);
+        });
+            }
         }
 
         function closeModal() {
-            clearPdfControlsTimer();
-            resetPdfState();
+            destroyGallerySlider();
             modalBody.innerHTML = "";
             modalBody.className = "modal-body";
             modal.classList.remove("is-open");
@@ -645,14 +521,6 @@
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && modal.classList.contains("is-open")) {
                 closeModal();
-            }
-        });
-
-        window.addEventListener("resize", async () => {
-            const viewer = modalBody.querySelector(".modal-pdf-viewer");
-            if (viewer && modal.classList.contains("is-open") && pdfState.document) {
-                calculatePdfScale(viewer);
-                await renderPdfPage(viewer);
             }
         });
     </script>
