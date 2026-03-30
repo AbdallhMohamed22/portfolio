@@ -231,7 +231,8 @@
             controlsTimer: null,
             baseViewport: null,
             scale: 1,
-            touchStartX: 0
+            touchStartX: 0,
+            cache: new Map()
         };
 
         if (window.pdfjsLib) {
@@ -269,6 +270,7 @@
             pdfState.baseViewport = null;
             pdfState.scale = 1;
             pdfState.touchStartX = 0;
+            pdfState.cache = new Map();
         }
 
         function isMobilePdfViewer() {
@@ -317,29 +319,102 @@
             target.classList.toggle("has-ambient", Boolean(source));
         }
 
+        function getPdfRenderProfile() {
+            const baseScale = isMobilePdfViewer() ? 1.05 : 1.16;
+            const outputScale = isMobilePdfViewer()
+                ? Math.min(window.devicePixelRatio || 1, 1.35)
+                : Math.min(window.devicePixelRatio || 1, 1.85);
+
+            return { baseScale, outputScale };
+        }
+
+        function getPdfCacheKey(pageNumber, scale, outputScale) {
+            return `${pageNumber}-${Math.round(scale * 1000)}-${Math.round(outputScale * 100)}`;
+        }
+
+        function displayPdfSlide(viewer, cachedPage) {
+            const slide = viewer.querySelector(".pdf-slide");
+            if (!slide) {
+                return;
+            }
+
+            slide.src = cachedPage.src;
+            slide.onload = () => {
+                setAmbientBackground(viewer, cachedPage.ambient);
+                viewer.classList.add("page-ready");
+                viewer.classList.remove("is-rendering");
+                setPdfLoadingState(viewer, false);
+            };
+        }
+
+        async function renderPdfPageToImage(pageNumber) {
+            if (!pdfState.document || pageNumber < 1 || pageNumber > pdfState.totalPages) {
+                return null;
+            }
+
+            const { baseScale, outputScale } = getPdfRenderProfile();
+            const effectiveScale = pdfState.scale * baseScale;
+            const cacheKey = getPdfCacheKey(pageNumber, effectiveScale, outputScale);
+
+            if (pdfState.cache.has(cacheKey)) {
+                return pdfState.cache.get(cacheKey);
+            }
+
+            const page = await pdfState.document.getPage(pageNumber);
+            const viewport = page.getViewport({ scale: effectiveScale });
+            const offscreenCanvas = document.createElement("canvas");
+            const offscreenContext = offscreenCanvas.getContext("2d");
+
+            offscreenCanvas.width = Math.floor(viewport.width * outputScale);
+            offscreenCanvas.height = Math.floor(viewport.height * outputScale);
+            offscreenContext.setTransform(outputScale, 0, 0, outputScale, 0, 0);
+
+            await page.render({
+                canvasContext: offscreenContext,
+                viewport
+            }).promise;
+
+            const pageImage = offscreenCanvas.toDataURL("image/jpeg", 0.78);
+            const cachedPage = {
+                src: pageImage,
+                ambient: pageImage,
+                width: offscreenCanvas.width,
+                height: offscreenCanvas.height
+            };
+
+            pdfState.cache.set(cacheKey, cachedPage);
+            return cachedPage;
+        }
+
+        async function prefetchPdfPage(pageNumber) {
+            await renderPdfPageToImage(pageNumber);
+        }
+
         async function renderPdfPage(viewer) {
             if (!pdfState.document) {
                 return;
             }
 
-            const canvas = viewer.querySelector(".pdf-canvas");
             const pageIndicator = viewer.querySelector("[data-page-indicator]");
             const previousButton = viewer.querySelector("[data-action='prev']");
             const nextButton = viewer.querySelector("[data-action='next']");
-            const canvasContext = canvas.getContext("2d");
-            const page = await pdfState.document.getPage(pdfState.page);
-            const outputScale = window.devicePixelRatio || 1;
-            const viewport = page.getViewport({ scale: pdfState.scale });
-
-            canvas.width = Math.floor(viewport.width * outputScale);
-            canvas.height = Math.floor(viewport.height * outputScale);
-            canvas.style.width = `${viewport.width}px`;
-            canvas.style.height = `${viewport.height}px`;
-
-            canvasContext.setTransform(outputScale, 0, 0, outputScale, 0, 0);
+            const { baseScale, outputScale } = getPdfRenderProfile();
+            const effectiveScale = pdfState.scale * baseScale;
+            const cacheKey = getPdfCacheKey(pdfState.page, effectiveScale, outputScale);
 
             viewer.classList.add("is-rendering");
+            viewer.classList.remove("page-ready");
             setPdfLoadingState(viewer, true, "Rendering page...");
+
+            if (pdfState.cache.has(cacheKey)) {
+                pageIndicator.textContent = `Page ${pdfState.page} / ${pdfState.totalPages}`;
+                previousButton.disabled = pdfState.page <= 1;
+                nextButton.disabled = pdfState.page >= pdfState.totalPages;
+                displayPdfSlide(viewer, pdfState.cache.get(cacheKey));
+                void prefetchPdfPage(pdfState.page + 1);
+                void prefetchPdfPage(pdfState.page - 1);
+                return;
+            }
 
             if (pdfState.renderTask) {
                 try {
@@ -349,13 +424,16 @@
                 }
             }
 
-            pdfState.renderTask = page.render({
-                canvasContext,
-                viewport
-            });
-
             try {
-                await pdfState.renderTask.promise;
+                const cachedPage = await renderPdfPageToImage(pdfState.page);
+                if (!cachedPage) {
+                    return;
+                }
+
+                pageIndicator.textContent = `Page ${pdfState.page} / ${pdfState.totalPages}`;
+                previousButton.disabled = pdfState.page <= 1;
+                nextButton.disabled = pdfState.page >= pdfState.totalPages;
+                displayPdfSlide(viewer, cachedPage);
             } catch (error) {
                 if (error?.name !== "RenderingCancelledException") {
                     throw error;
@@ -365,15 +443,8 @@
                 pdfState.renderTask = null;
             }
 
-            pageIndicator.textContent = `Page ${pdfState.page} / ${pdfState.totalPages}`;
-            previousButton.disabled = pdfState.page <= 1;
-            nextButton.disabled = pdfState.page >= pdfState.totalPages;
-
-            requestAnimationFrame(() => {
-                viewer.classList.remove("is-rendering");
-                setPdfLoadingState(viewer, false);
-                setAmbientBackground(viewer, canvas.toDataURL("image/jpeg", 0.72));
-            });
+            void prefetchPdfPage(pdfState.page + 1);
+            void prefetchPdfPage(pdfState.page - 1);
         }
 
         function clearPdfControlsTimer() {
@@ -404,10 +475,11 @@
                     <div class="viewer-ambient-overlay" aria-hidden="true"></div>
                     <div class="modal-loading">
                         <span></span>
+                        <div class="pdf-loading-skeleton" aria-hidden="true"></div>
                         <p>Loading document preview...</p>
                     </div>
                     <div class="pdf-canvas-shell">
-                        <canvas class="pdf-canvas"></canvas>
+                        <img class="pdf-slide" alt="PDF page preview">
                     </div>
                     <div class="pdf-overlay-controls">
                         <button type="button" class="pdf-toolbar-button" data-action="prev">Prev</button>
