@@ -25,7 +25,7 @@
             <div class="hero-layout">
                 <div class="hero-copy">
                     <p class="hero-kicker">Visual Identity and Brand Design</p>
-                    <h1>Abdallh Mohamed</h1>
+                    <h1>Abdallah Mohamed</h1>
                     <h2>Graphic Designer crafting polished visuals with clarity, strategy, and personality.</h2>
                     <p class="hero-intro">
                         I create modern brand materials, editorial layouts, and marketing pieces
@@ -161,12 +161,11 @@
             <div>
                 <h2>Contact</h2>
                 <p>
-                    This is placeholder text for your contact section. Invite visitors to
-                    reach out for collaborations, freelance work, or full-time opportunities.
+                    Have a project in your mind?
+                    Let’s connect and create something meaningful together.
                 </p>
                 <address>
-                    <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
-                    <p>Location: Your City, Country</p>
+                    <p>Email: <a href="abdallah01mohamed1@gmail.com">abdallah01mohamed1@gmail.com</a></p>
                 </address>
                 <a
                     class="whatsapp-button"
@@ -219,36 +218,19 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const sections = document.querySelectorAll("section");
-        const navLinks = document.querySelectorAll("nav a");
         const modal = document.getElementById("project-modal");
         const modalBody = document.getElementById("modal-body");
         const modalTitle = document.getElementById("modal-title");
         const modalDescription = document.getElementById("modal-description");
         const projectLinks = document.querySelectorAll(".project-link");
         const closeControls = document.querySelectorAll("[data-close-modal]");
+        const navLinks = document.querySelectorAll('nav a[href^="#"]');
+        const observedSections = document.querySelectorAll("main > section[id]");
+        const sectionVisibility = new Map();
         let projectSwiper = null;
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    navLinks.forEach((link) => {
-                    link.classList.remove("active");
-
-                    if (link.getAttribute("href") === `#${entry.target.id}`) {
-                        link.classList.add("active");
-                    }
-                    });
-                }
-                });
-            },
-            {
-                threshold: 0.6, // يتحكم امتى يتغير
-            }
-            );
-
-sections.forEach((section) => {
-  observer.observe(section);
-});
+        let navObserverLocked = false;
+        let navObserverTimer = null;
+ 
         const PROJECT_GALLERIES = {
             sahab: [
                 "assets/images/projects/sahab/sahab-brochure_page-0001.jpg",
@@ -537,6 +519,84 @@ sections.forEach((section) => {
                 openModal(link);
             });
         });
+
+        function setActiveSectionById(activeSectionId) {
+            navLinks.forEach((link) => {
+                const isActive = link.getAttribute("href") === `#${activeSectionId}`;
+                link.classList.toggle("active", isActive);
+                if (isActive) {
+                    link.setAttribute("aria-current", "page");
+                } else {
+                    link.removeAttribute("aria-current");
+                }
+            });
+        }
+
+        function refreshActiveSection() {
+            if (window.scrollY <= 80) {
+                setActiveSectionById("hero");
+                return;
+            }
+
+            const zoneTop = window.innerHeight * 0.3;
+            const zoneBottom = window.innerHeight * 0.7;
+            let bestSectionId = "hero";
+            let largestZoneOverlap = -1;
+
+            observedSections.forEach((section) => {
+                const rect = section.getBoundingClientRect();
+                const overlapTop = Math.max(rect.top, zoneTop);
+                const overlapBottom = Math.min(rect.bottom, zoneBottom);
+                const zoneOverlap = Math.max(0, overlapBottom - overlapTop);
+
+                if (zoneOverlap > largestZoneOverlap) {
+                    largestZoneOverlap = zoneOverlap;
+                    bestSectionId = section.id;
+                }
+            });
+
+            setActiveSectionById(bestSectionId);
+        }
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                sectionVisibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+            });
+
+            if (navObserverLocked) {
+                return;
+            }
+
+            refreshActiveSection();
+        }, {
+            threshold: [0.3, 0.5, 0.7],
+            rootMargin: "-20% 0px -35% 0px"
+        });
+
+        observedSections.forEach((section) => {
+            sectionObserver.observe(section);
+        });
+
+        navLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+                const targetId = link.getAttribute("href")?.replace("#", "");
+                if (targetId) {
+                    setActiveSectionById(targetId);
+                }
+                navObserverLocked = true;
+
+                if (navObserverTimer) {
+                    clearTimeout(navObserverTimer);
+                }
+
+                navObserverTimer = window.setTimeout(() => {
+                    navObserverLocked = false;
+                    refreshActiveSection();
+                }, 450);
+            });
+        });
+
+        refreshActiveSection();
 
         closeControls.forEach((control) => {
             control.addEventListener("click", closeModal);
