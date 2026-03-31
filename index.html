@@ -218,6 +218,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll("nav a");
         const modal = document.getElementById("project-modal");
         const modalBody = document.getElementById("modal-body");
         const modalTitle = document.getElementById("modal-title");
@@ -225,6 +227,28 @@
         const projectLinks = document.querySelectorAll(".project-link");
         const closeControls = document.querySelectorAll("[data-close-modal]");
         let projectSwiper = null;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach((link) => {
+                    link.classList.remove("active");
+
+                    if (link.getAttribute("href") === `#${entry.target.id}`) {
+                        link.classList.add("active");
+                    }
+                    });
+                }
+                });
+            },
+            {
+                threshold: 0.6, // يتحكم امتى يتغير
+            }
+            );
+
+sections.forEach((section) => {
+  observer.observe(section);
+});
         const PROJECT_GALLERIES = {
             sahab: [
                 "assets/images/projects/sahab/sahab-brochure_page-0001.jpg",
