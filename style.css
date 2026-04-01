@@ -283,6 +283,7 @@
 
     .hero-tags li {
         padding: 0.5rem 1rem;
+        margin:auto;
         border-radius: var(--radius-pill);
         border: 1px solid rgba(184, 149, 90, 0.25);
         background: rgba(240, 228, 204, 0.3);
@@ -557,31 +558,6 @@
         filter: saturate(1.05);
     }
 
-    /* Project number badge */
-    .project-num {
-        position: absolute;
-        top: 1.2rem;
-        left: 1.2rem;
-        z-index: 2;
-        width: 2.4rem;
-        height: 2.4rem;
-        display: grid;
-        place-items: center;
-        background: rgba(253, 250, 246, 0.9);
-        border: 1px solid rgba(184, 149, 90, 0.25);
-        border-radius: 50%;
-        font-family: var(--font-heading);
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: var(--gold);
-        backdrop-filter: blur(8px);
-        transition: background 0.3s, color 0.3s;
-    }
-
-    .project-link:hover .project-num {
-        background: var(--gold);
-        color: var(--white);
-    }
 
     .project-info {
         padding: 1.4rem 1.5rem 1.5rem;
@@ -1096,9 +1072,10 @@
         }
 
         .contact-illustration-mobile {
-            display: block;
-            width: 145px;
+            width: 40%;
+            max-width: 120px;
             height: auto;
+            display: flex;
             flex-shrink: 0;
         }
 
