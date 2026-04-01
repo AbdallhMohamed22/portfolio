@@ -563,6 +563,7 @@ address a:focus-visible {
 }
 
 .whatsapp-button {
+    margin: auto;
     margin-top: 1.4rem;
     padding: 0.95rem 1.35rem;
     border-radius: 999px;
