@@ -610,6 +610,9 @@
     .contact-inner {
         display: grid;
         grid-template-columns: 1fr minmax(0, 400px);
+        grid-template-areas:
+            "copy illustration"
+            "actions illustration";
         align-items: center;
         gap: clamp(2rem, 5vw, 5rem);
         padding: clamp(2.5rem, 4vw, 4rem);
@@ -631,7 +634,21 @@
         pointer-events: none;
     }
 
-    .contact-copy { position: relative; z-index: 1; }
+    .contact-copy {
+        position: relative;
+        z-index: 1;
+        grid-area: copy;
+    }
+
+    .contact-actions {
+        position: relative;
+        z-index: 1;
+        grid-area: actions;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
 
     .contact-eyebrow {
         font-size: 0.72rem;
@@ -660,6 +677,14 @@
     }
 
     #contact h2 em { color: var(--gold-light); }
+
+    .contact-heading-row {
+        display: block;
+    }
+
+    .contact-illustration-mobile {
+        display: none;
+    }
 
     .contact-desc {
         color: rgba(247, 242, 235, 0.65);
@@ -714,6 +739,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        grid-area: illustration;
     }
 
     .contact-illustration {
@@ -1030,8 +1056,55 @@
 
         .about-inner { grid-template-columns: 1fr; }
         .projects-grid { grid-template-columns: 1fr; }
-        .contact-inner { grid-template-columns: 1fr; }
-        .contact-illustration-wrap { order: -1; }
+        .contact-inner {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "copy"
+                "illustration"
+                "actions";
+        }
+        .contact-illustration-wrap {
+            justify-content: center;
+        }
+        .contact-illustration {
+            width: 60%;
+            max-width: 320px;
+        }
+        .contact-actions {
+            align-items: center;
+            gap: 0.85rem;
+        }
+        .contact-actions address,
+        .contact-actions .btn-whatsapp {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact-heading-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .contact-heading-row h2 {
+            flex: 1;
+            text-align: left;
+            margin-bottom: 0;
+        }
+
+        .contact-illustration-mobile {
+            display: block;
+            width: 145px;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        .contact-illustration-wrap {
+            display: none;
+        }
     }
 
     @media (max-width: 768px) {
