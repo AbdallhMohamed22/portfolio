@@ -1098,8 +1098,8 @@
         }
 
         .modal-body, .modal-body-gallery, .modal-gallery, .project-swiper {
-            min-height: calc(100vh - 9rem);
-            height: calc(100vh - 9rem);
+            min-height: auto;
+            height: auto;
         }
 
         .project-swiper { padding: 0.5rem 0.5rem 2.5rem; height: auto; min-height: auto; }
