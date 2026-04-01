@@ -177,6 +177,34 @@ section {
     z-index: 2;
 }
 
+.hero-copy > * {
+    animation: hero-fade-up 0.8s ease both;
+}
+
+.hero-copy > :nth-child(1) {
+    animation-delay: 0.08s;
+}
+
+.hero-copy > :nth-child(2) {
+    animation-delay: 0.16s;
+}
+
+.hero-copy > :nth-child(3) {
+    animation-delay: 0.24s;
+}
+
+.hero-copy > :nth-child(4) {
+    animation-delay: 0.32s;
+}
+
+.hero-copy > :nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+.hero-copy > :nth-child(6) {
+    animation-delay: 0.48s;
+}
+
 .hero-kicker {
     display: inline-flex;
     align-items: center;
@@ -385,6 +413,41 @@ address p {
     color: var(--text-muted);
 }
 
+.contact-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 380px);
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    grid-template-areas:
+        "copy illustration"
+        "cta illustration";
+}
+
+.contact-copy {
+    min-width: 0;
+    grid-area: copy;
+}
+
+.contact-illustration-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: illustration;
+}
+
+.contact-illustration {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    opacity: 0.92;
+    filter: drop-shadow(0 18px 28px rgba(16, 33, 58, 0.08));
+}
+
+.contact-cta {
+    grid-area: cta;
+    margin-top: 1.4rem;
+}
+
 #about h2 {
     margin-bottom: 1.1rem;
 }
@@ -423,16 +486,16 @@ address p {
     border: 1px solid rgba(20, 37, 60, 0.08);
     border-radius: var(--radius-md);
     background: rgba(255, 251, 246, 0.84);
-    box-shadow: 0 18px 42px rgba(18, 34, 56, 0.06);
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    box-shadow: 0 20px 46px rgba(18, 34, 56, 0.08);
+    transition: transform 0.38s ease, box-shadow 0.38s ease, border-color 0.35s ease;
 }
 
 .project-link:hover .project-card,
 .project-link:focus-visible .project-card,
 .project-link:focus-within .project-card {
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(1.012);
     border-color: rgba(61, 124, 103, 0.2);
-    box-shadow: 0 26px 54px rgba(18, 34, 56, 0.12);
+    box-shadow: 0 30px 62px rgba(18, 34, 56, 0.14);
 }
 
 .project-link:focus-visible {
@@ -1041,6 +1104,18 @@ footer {
     }
 }
 
+@keyframes hero-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes pdf-skeleton-shimmer {
     to {
         background-position: -120% 0, 0 0;
@@ -1137,6 +1212,28 @@ footer {
 
     .projects-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .contact-layout {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "copy"
+            "illustration"
+            "cta";
+        gap: 1rem;
+    }
+
+    .contact-illustration-wrap {
+        margin-top: 0.1rem;
+    }
+
+    .contact-illustration {
+        max-width: 320px;
+    }
+
+    .contact-cta {
+        margin-top: 0.2rem;
+        justify-self: start;
     }
 
     .modal {

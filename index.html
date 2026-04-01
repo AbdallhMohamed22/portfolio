@@ -6,6 +6,7 @@
     <meta name="description" content="Professional portfolio website">
     <title>Portfolio</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,7 +24,7 @@
     <main>
         <section id="hero">
             <div class="hero-layout">
-                <div class="hero-copy">
+                <div class="hero-copy" data-aos="fade-up" data-aos-duration="800">
                     <p class="hero-kicker">Visual Identity and Brand Design</p>
                     <h1>Abdallah Mohamed</h1>
                     <h2>Graphic Designer crafting polished visuals with clarity, strategy, and personality.</h2>
@@ -43,7 +44,7 @@
                     </ul>
                 </div>
 
-                <div class="hero-visual">
+                <div class="hero-visual" data-aos="fade-in" data-aos-duration="900" data-aos-delay="120">
                     <div class="hero-glow" aria-hidden="true"></div>
                     <figure class="hero-portrait">
                         <img src="assets/images/profile-photo.jpeg" alt="Portrait of Abdallh Mohamed">
@@ -85,7 +86,7 @@
                         data-title="Property Marketing Brochure | Sahab Real Estate"
                         data-description="A modern brochure design for Sahab Development, created to highlight property features and location advantages with a clean and premium visual style."
                         >
-                        <article class="project-card">
+                        <article class="project-card" data-aos="fade-up" data-aos-duration="700">
                             <figure>
                                 <img src="assets/images/project1_preview.png" alt="Project One">
                                 <figcaption>Property Marketing Brochure | Sahab Real Estate</figcaption>
@@ -104,7 +105,7 @@
                                          presenting property features clearly and enhancing visual appeal."
                         aria-label="Open preview for Project Two"
                     >
-                        <article class="project-card">
+                        <article class="project-card" data-aos="fade-up" data-aos-duration="700" data-aos-delay="60">
                             <figure>
                                 <img src="assets/images/project2_preview.png" alt="Placeholder preview for project two">
                                 <figcaption>Property Marketing Brochure | Skills Real Estate</figcaption>
@@ -124,7 +125,7 @@
                                           using clear messaging and a visually striking layout optimized for outdoor visibility."
                         aria-label="Open preview for Project Three PDF"
                     >
-                        <article class="project-card">
+                        <article class="project-card" data-aos="fade-up" data-aos-duration="700" data-aos-delay="120">
                             <figure>
                                 <img src="assets/images/street-sign-design.jpeg" alt="Placeholder preview for project three PDF">
                                 <figcaption>Real Estate Billboard Design | Tower Development</figcaption>
@@ -144,7 +145,7 @@
                                           using clear messaging and a visually striking layout optimized for outdoor visibility."
                         aria-label="Open preview for Project Three PDF"
                     >
-                        <article class="project-card">
+                        <article class="project-card" data-aos="fade-up" data-aos-duration="700" data-aos-delay="180">
                             <figure>
                                 <img src="assets/images/street-sign-design2.jpeg" alt="Placeholder preview for project three PDF">
                                 <figcaption>Real Estate Billboard Design | Tower Development</figcaption>
@@ -158,17 +159,30 @@
         </section>
 
         <section id="contact">
-            <div>
+            <div data-aos="fade-up" data-aos-duration="800">
+                <div class="contact-layout">
+                    <div class="contact-copy">
                 <h2>Contact</h2>
                 <p>
-                    Have a project in your mind?
-                    Let’s connect and create something meaningful together.
+                    Have a project in mind or want to elevate your brand visuals?
+
+                    Let’s create something clean, impactful, and built to stand out.
+
+                    I’m available for freelance work, collaborations, and long-term projects.
                 </p>
                 <address>
                     <p>Email: <a href="abdallah01mohamed1@gmail.com">abdallah01mohamed1@gmail.com</a></p>
                 </address>
+                    </div>
+                    <div class="contact-illustration-wrap">
+                        <img
+                            class="contact-illustration"
+                            src="assets/images/contact illustration.svg"
+                            alt="Contact illustration"
+                        >
+                    </div>
                 <a
-                    class="whatsapp-button"
+                    class="whatsapp-button contact-cta"
                     href="https://wa.me/201063548727?text=Hello%2C%20I%20saw%20your%20portfolio"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -181,6 +195,7 @@
                     </span>
                     <span>Chat on WhatsApp</span>
                 </a>
+                </div>
             </div>
         </section>
     </main>
@@ -215,9 +230,30 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
-        const sections = document.querySelectorAll("section");
+        const lenis = new Lenis({
+            duration: 1.05,
+            smoothWheel: true,
+            smoothTouch: false
+        });
+
+        function lenisRaf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(lenisRaf);
+        }
+
+        requestAnimationFrame(lenisRaf);
+
+        AOS.init({
+            once: true,
+            offset: 70,
+            duration: 700,
+            easing: "ease-out-cubic"
+        });
+
         const modal = document.getElementById("project-modal");
         const modalBody = document.getElementById("modal-body");
         const modalTitle = document.getElementById("modal-title");
@@ -577,11 +613,25 @@
             sectionObserver.observe(section);
         });
 
+        lenis.on("scroll", () => {
+            if (!navObserverLocked) {
+                refreshActiveSection();
+            }
+        });
+
         navLinks.forEach((link) => {
-            link.addEventListener("click", () => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
                 const targetId = link.getAttribute("href")?.replace("#", "");
                 if (targetId) {
                     setActiveSectionById(targetId);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        lenis.scrollTo(targetSection, {
+                            offset: -110,
+                            duration: 1
+                        });
+                    }
                 }
                 navObserverLocked = true;
 
